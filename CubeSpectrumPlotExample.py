@@ -50,7 +50,7 @@ sp = pyspeckit.Spectrum(xarr=spectral_axis, data=cubespec_mJyperbeam.value, head
 if velconvention == 'optical':
     sp.xarr.convert_to_unit('km/s', refX=restf, equivalencies=u.doppler_optical(restf)) # Do this first so I can smooth to smoothfact km/s spectral resolution
 elif velconvention == 'radio':
-    sp.xarr.convert_to_unit('km/s', refX=cubespec.header['RESTFRQ']*u.Hz, equivalencies=u.doppler_radio(cubespec.header['RESTFRQ']*u.Hz))
+    sp.xarr.convert_to_unit('km/s', refX=restf, equivalencies=u.doppler_radio(restf))
 sp.smooth(smoothfact/np.abs(sp.xarr.cdelt(approx=True).value)) # Smooth to smoothfact km/s, which is smoothfact/cdelt channels
 sp.xarr.convert_to_unit('GHz') # This will give me a frequency axis
 sp.plotter(ymin=yminval,ymax=ymaxval)
