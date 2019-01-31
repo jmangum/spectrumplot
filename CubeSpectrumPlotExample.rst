@@ -4,9 +4,9 @@ General Spectrum-Through-a-Cube Plot
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This is a template for a simple spectrum-through-a-cube plot.
 Features include:
-  1. Reading positions and areal patterns at which to derive spectra
-     from a regions file.
-  2. Inputs via YAML file.
+
+1. Reading positions and areal patterns at which to derive spectra from a regions file.
+2. Inputs via YAML file.
 
 Input parameters in YAML file are:
 
@@ -57,6 +57,7 @@ lines".
     arrow_tips = list(map(int,params['arrow_tips'].split(", "))) # Size of arrow tips used in annotate
     vregion = u.Quantity(float(params['vregion']), u.km/u.s) # Nominal velocity of region used to derive spectrum to properly mark the line center velocity positions
 
+    # Define spectral line annotation box locations
     box_locs = [x+25 for x in arrow_tips]
     cube = SpectralCube.read(cubefile) # Read cube
     print(cube)
@@ -67,7 +68,7 @@ lines".
 
     cubespec_hdu = cubespec_mJyperbeam.hdu
 
-    restf = cubespec.header['RESTFRQ']*u.Hz
+    restf = cubespec.wcs.wcs.restfrq*u.Hz
     if velconvention == 'optical':
         offset = restf-(vregion).to(u.GHz,u.doppler_optical(restf))
     elif velconvention == 'radio':
@@ -78,9 +79,9 @@ lines".
     sp = pyspeckit.Spectrum(xarr=spectral_axis, data=cubespec_mJyperbeam.value, header={}) # Extract spectrum from cubespec_mJyperbeam
     # The following will convert sp to the specified velocity convention read from the input yaml file
     if velconvention == 'optical':
-        sp.xarr.convert_to_unit('km/s', refX=cubespec.header['RESTFRQ']*u.Hz, equivalencies=u.doppler_optical(cubespec.header['RESTFRQ']*u.Hz)) # Do this first so I can smooth to smoothfact km/s spectral resolution
+        sp.xarr.convert_to_unit('km/s', refX=restf, equivalencies=u.doppler_optical(restf)) # Do this first so I can smooth to smoothfact km/s spectral resolution
     elif velconvention == 'radio':
-        sp.xarr.convert_to_unit('km/s', refX=cubespec.header['RESTFRQ']*u.Hz, equivalencies=u.doppler_radio(cubespec.header['RESTFRQ']*u.Hz))
+        sp.xarr.convert_to_unit('km/s', refX=restf, equivalencies=u.doppler_radio(restf))
     sp.smooth(smoothfact/np.abs(sp.xarr.cdelt(approx=True).value)) # Smooth to smoothfact km/s, which is smoothfact/cdelt channels
     sp.xarr.convert_to_unit('GHz') # This will give me a frequency axis
     sp.plotter(ymin=yminval,ymax=ymaxval)
