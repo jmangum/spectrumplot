@@ -92,8 +92,9 @@ lines".
     sp.plotter.axis.annotate(s='NGC253',xy=(0.05,0.9),xycoords='axes fraction') # Annotate with source name
     sp.plotter.savefig('CubeSpectrumPlotExample.png') # Save to output file
     
-.. figure:: spectrumplot/CubeSpectrumPlotExample.png
+.. figure:: CubeSpectrumPlotExample.png
 	:alt: Sample spectrum-through-a-cube plot with transition markers.
         :figwidth: 800
         :width: 800
 	
+	Sample spectrum-through-a-cube plot with transition markers.
