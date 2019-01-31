@@ -9,19 +9,19 @@ Features include:
   2. Inputs via YAML file.
 
 Input parameters in YAML file are:
-  cubefile: FITS cube file name
-  regfile: Regions file name
-  velconvention: Velocity convention for spectral axis of plot (optical or radio)
-  regplot: Region number in regions file at which to plot spectum
-  smoothfact: Spectral smoothing factor
-  yminval: Intensity axis minimum value
-  ymaxval: Intensity axis maximum value
-  linenames: Name tags for transitions marked in spectrum
-  linexvals: Frequency values (in MHz) for linenames marked on spectrum
-  linenames_sizes: Character sizes for linename annotations
-  arrow_tips: Arrow tip sizes
-  vregion: Nominal velcity for region plotted (to allow for centering
-           of linexvals on linenames plotted)
+
+- cubefile: FITS cube file name
+- regfile: Regions file name
+- velconvention: Velocity convention for spectral axis of plot (optical or radio)
+- regplot: Region number in regions file at which to plot spectum
+- smoothfact: Spectral smoothing factor
+- yminval: Intensity axis minimum value
+- ymaxval: Intensity axis maximum value
+- linenames: Name tags for transitions marked in spectrum
+- linexvals: Frequency values (in MHz) for linenames marked on spectrum
+- linenames_sizes: Character sizes for linename annotations
+- arrow_tips: Arrow tip sizes
+- vregion: Nominal velcity for region plotted (to allow for centering of linexvals on linenames plotted)
 
 Note that this example uses an input list of transitions to mark which
 inculdes transitions outside the frequency range of the FITS file used
@@ -95,5 +95,4 @@ lines".
 	:alt: Sample spectrum-through-a-cube plot with transition markers.
         :figwidth: 800
         :width: 800
-
-        Sample spectrum-through-a-cube plot with transition markers.
+	
