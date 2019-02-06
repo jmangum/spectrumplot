@@ -12,6 +12,8 @@ Input parameters in YAML file are:
 
 - cubefile: FITS cube file name
 - regfile: Regions file name
+- figfile: File name for output figure file
+- target: Target name used to annotate upper-left corner of plot
 - velconvention: Velocity convention for spectral axis of plot (optical or radio)
 - regplot: Region number in regions file at which to plot spectum
 - smoothfact: Spectral smoothing factor
@@ -46,19 +48,23 @@ lines".
 
     cubefile = params['cubefile'] # Cube from which the spectrum is to be extracted
     regfile = params['regfile'] # Regions file containing positions through which spectra can be extracted
+    target = params['target'] # Target name for plot annotation
+    figfile = params['figfile'] # Output figure file name
     velconvention = params['velconvention'] # Velocity axis convention used for spectrum
     regplot = int(params['regplot']) # Which region number to produce spectrum towards
     smoothfact = int(params['smoothfact']) # Smooth spectrum to smoothfact resolution in km/s
     yminval = float(params['yminval']) # Intensity axis minimum value
     ymaxval = float(params['ymaxval']) # Intensity axis maximum value
-    linenames = list(params['linenames'].split(", ")) # Line names to use for line ID markers
-    linexvals = u.Quantity(list(map(float, params['linexvals'].split(", "))), u.MHz) # X-axis values for linenames
-    linenames_sizes = np.array(list(map(int,params['linenames_sizes'].split(", ")))) # Size in points for each linename
-    arrow_tips = list(map(int,params['arrow_tips'].split(", "))) # Size of arrow tips used in annotate
+    # Allow for empty line marker variables
+    if params['linenames'] != None:
+        linenames = list(params['linenames'].split(", ")) # Line names to use for line ID markers
+        linexvals = u.Quantity(list(map(float, params['linexvals'].split(", "))), u.MHz) # X-axis values for linenames
+        linenames_sizes = np.array(list(map(int,params['linenames_sizes'].split(", ")))) # Size in points for each linename
+        arrow_tips = list(map(int,params['arrow_tips'].split(", "))) # Size of arrow tips used in annotate
+        # Define spectral line annotation box locations
+        box_locs = [x+25 for x in arrow_tips]
     vregion = u.Quantity(float(params['vregion']), u.km/u.s) # Nominal velocity of region used to derive spectrum to properly mark the line center velocity positions
 
-    # Define spectral line annotation box locations
-    box_locs = [x+25 for x in arrow_tips]
     cube = SpectralCube.read(cubefile) # Read cube
     print(cube)
 
@@ -87,10 +93,11 @@ lines".
     sp.plotter(ymin=yminval,ymax=ymaxval)
     sp.plotter.label(xlabel='Rest Frequency (GHz)',ylabel='Flux Density (mJy beam$^{-1}$)') # X- and Y-axis labeling
     sp.plotter.axis.plot([sp.xarr.min().value,sp.xarr.max().value],[0,0],color='k',linestyle='-',zorder=-5) # Draw a line at y=0
-    sp.plotter.line_ids(linenames,linexvals,auto_yloc=False,auto_yloc_fraction=0.83,label1_size=9,arrow_tip=arrow_tips,box_loc=box_locs) # Plot line IDs read from yaml file
+    if params['linenames'] != None:
+sp.plotter.line_ids(linenames,linexvals,auto_yloc=False,auto_yloc_fraction=0.83,label1_size=9,arrow_tip=arrow_tips,box_loc=box_locs) # Plot line IDs read from yaml file
     # NOTE: annotate must be called *after* line_ids
-    sp.plotter.axis.annotate(s='NGC253',xy=(0.05,0.9),xycoords='axes fraction') # Annotate with source name
-    sp.plotter.savefig('CubeSpectrumPlotExample.png') # Save to output file
+    sp.plotter.axis.annotate(s=target,xy=(0.05,0.9),xycoords='axes fraction') # Annotate with source name
+    sp.plotter.savefig(figfile) # Save to output file
     
 .. figure:: CubeSpectrumPlotExample.png
 	:alt: Sample spectrum-through-a-cube plot with transition markers.
