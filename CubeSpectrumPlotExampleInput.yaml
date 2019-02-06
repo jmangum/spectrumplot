@@ -1,5 +1,7 @@
 cubefile: CubeSpectrumPlotExample.fits
 regfile: LeroyNGC253Positions.reg
+figfile: CubeSpectrumPlotExample.png
+target: NGC253
 velconvention: optical
 regplot: 5
 smoothfact: 10
