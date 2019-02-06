@@ -94,7 +94,7 @@ lines".
     sp.plotter.label(xlabel='Rest Frequency (GHz)',ylabel='Flux Density (mJy beam$^{-1}$)') # X- and Y-axis labeling
     sp.plotter.axis.plot([sp.xarr.min().value,sp.xarr.max().value],[0,0],color='k',linestyle='-',zorder=-5) # Draw a line at y=0
     if params['linenames'] != None:
-sp.plotter.line_ids(linenames,linexvals,auto_yloc=False,auto_yloc_fraction=0.83,label1_size=9,arrow_tip=arrow_tips,box_loc=box_locs) # Plot line IDs read from yaml file
+        sp.plotter.line_ids(linenames,linexvals,auto_yloc=False,auto_yloc_fraction=0.83,label1_size=9,arrow_tip=arrow_tips,box_loc=box_locs) # Plot line IDs read from yaml file
     # NOTE: annotate must be called *after* line_ids
     sp.plotter.axis.annotate(s=target,xy=(0.05,0.9),xycoords='axes fraction') # Annotate with source name
     sp.plotter.savefig(figfile) # Save to output file
